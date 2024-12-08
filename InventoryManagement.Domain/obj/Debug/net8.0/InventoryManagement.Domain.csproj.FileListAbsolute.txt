@@ -1,0 +1,14 @@
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/bin/Debug/net8.0/InventoryManagement.Domain.deps.json
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/bin/Debug/net8.0/InventoryManagement.Domain.runtimeconfig.json
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/bin/Debug/net8.0/InventoryManagement.Domain.dll
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/bin/Debug/net8.0/InventoryManagement.Domain.pdb
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.csproj.AssemblyReference.cache
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.AssemblyInfoInputs.cache
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.AssemblyInfo.cs
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.csproj.CoreCompileInputs.cache
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.dll
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/refint/InventoryManagement.Domain.dll
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.pdb
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/InventoryManagement.Domain.genruntimeconfig.cache
+/Users/djordjegrubac/InventoryManagement/InventoryManagement.Domain/obj/Debug/net8.0/ref/InventoryManagement.Domain.dll
