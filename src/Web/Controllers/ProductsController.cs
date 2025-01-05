@@ -1,0 +1,44 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection.Product.Queries.GetCollection;
+using Microsoft.Extensions.DependencyInjection.Product.Queries.GetSingle;
+using Swashbuckle.AspNetCore.Annotations;
+
+namespace Microsoft.Extensions.DependencyInjection.Controllers;
+[Route("api/[controller]")]
+[ApiController]
+public class ProductsController: ControllerBase
+{
+    private readonly IMediator _mediator;
+
+    public ProductsController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
+    /// Retrieve all users.
+    /// </summary>
+    /// <returns>A list of users.</returns>
+    [HttpGet]
+    //[Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
+    [SwaggerOperation(Summary = "Get all products", Description = "Retrieve a list of all products.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetProducts()
+    {
+        var products = await _mediator.Send(new GetProductsQuery());
+        return Ok(products);
+    }
+
+    [HttpGet("{id}")]
+    // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
+    [SwaggerOperation(Summary = "Get product by ID", Description = "Retrieve the details of a specific product by ID.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> GetProductById(Guid id)
+    {
+        var product = await _mediator.Send(new GetProductQuery(id));
+        return product == null ? NotFound() : Ok(product);
+    }
+
+}
