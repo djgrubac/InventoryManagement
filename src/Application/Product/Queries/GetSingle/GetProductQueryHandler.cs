@@ -1,13 +1,14 @@
 using InventoryManagement.Core.DTO;
 using InventoryManagement.Core.Interfaces;
+using Entities = Inventory_Management.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection.Product.Queries.GetSingle;
 
 public class GetProductQueryHandler:IRequestHandler<GetProductQuery, Products?>
 {
-    private readonly IBaseRepository<Inventory_Management.Domain.Entities.Product> _productRepository;
+    private readonly IBaseRepository<Entities.Product> _productRepository;
 
-    public GetProductQueryHandler(IBaseRepository<Inventory_Management.Domain.Entities.Product> productRepository)
+    public GetProductQueryHandler(IBaseRepository<Entities.Product> productRepository)
     {
         _productRepository = productRepository;
     }

@@ -1,17 +1,18 @@
 using InventoryManagement.Core.Interfaces;
+using Entities = Inventory_Management.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection.Product.Commands.Create;
 
 public class ProductCreateCommandHandler:IRequestHandler<ProductCreateCommand, Guid>
 {
-    private readonly IBaseRepository<Inventory_Management.Domain.Entities.Product> _producRepository;
-    public ProductCreateCommandHandler(IBaseRepository<Inventory_Management.Domain.Entities.Product> producRepository)
+    private readonly IBaseRepository<Entities.Product> _producRepository;
+    public ProductCreateCommandHandler(IBaseRepository<Entities.Product> producRepository)
     {
         _producRepository = producRepository;
     }
     public async Task<Guid> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
     {
-        var product = new Inventory_Management.Domain.Entities.Product
+        var product = new Entities.Product
         {
             Id = Guid.NewGuid(),
             Name = request.Name,

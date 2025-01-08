@@ -4,10 +4,12 @@ using Inventory_Management.Domain.Constants;
 using Inventory_Management.Infrastructure.Data;
 using Inventory_Management.Infrastructure.Data.Interceptors;
 using Inventory_Management.Infrastructure.Identity;
+using InventoryManagement.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using Entities = Inventory_Management.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -43,6 +45,9 @@ public static class DependencyInjection
 
         services.AddAuthorization(options =>
             options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+        
+        // Register ProductRepository
+        services.AddScoped<IBaseRepository<Entities.Product>, ProductRepository>();
 
         return services;
     }

@@ -4,16 +4,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 
+// Optionally, add services related to application, infrastructure, etc.
+builder.Services.AddApplicationServices();  // Assuming this includes services like sender, etc.
+builder.Services.AddInfrastructureServices(builder.Configuration);
+
 // Register endpoint services (for API routing)
 builder.Services.AddEndpointsApiExplorer(); // Enable endpoint routing discovery
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
 });
-
-
-// Optionally, add services related to application, infrastructure, etc.
-builder.Services.AddApplicationServices();  // Assuming this includes services like sender, etc.
 
 var app = builder.Build();
 
