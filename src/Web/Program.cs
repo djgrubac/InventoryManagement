@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices();  // Assuming this includes services like sender, etc.
 builder.Services.AddInfrastructureServices(builder.Configuration);
 
+builder.Services.AddWebServices();
+
 // Register endpoint services (for API routing)
 builder.Services.AddEndpointsApiExplorer(); // Enable endpoint routing discovery
 builder.Services.AddSwaggerGen(options =>
