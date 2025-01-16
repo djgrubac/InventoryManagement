@@ -21,9 +21,10 @@ public static class DependencyInjection
             .AddDbContextCheck<ApplicationDbContext>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
-
-        services.AddRazorPages();
-
+        
+        //need this to use Controllers
+        services.AddControllers();
+        
         // Customise default API behaviour
         services.Configure<ApiBehaviorOptions>(options =>
             options.SuppressModelStateInvalidFilter = true);
