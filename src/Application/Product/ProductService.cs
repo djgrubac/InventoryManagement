@@ -1,21 +1,22 @@
 using InventoryManagement.Core.DTO;
 using Inventory_Management.Domain.Entities;
 using InventoryManagement.Core.Interfaces;
+using Entities = Inventory_Management.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection.Product;
 
 public class ProductService: IProductService
 {
-    private readonly IBaseRepository<Inventory_Management.Domain.Entities.Product> _productRepository;
+    private readonly IBaseRepository<Entities.Product> _productRepository;
 
-    public ProductService(IBaseRepository<Inventory_Management.Domain.Entities.Product> productRepository, IMapper mapper)
+    public ProductService(IBaseRepository<Entities.Product> productRepository, IMapper mapper)
     {
         _productRepository = productRepository;
     }
     
     public async Task<Guid> CreateProductAsync(string name, decimal price, int stockQuantity)
     {
-        var product = new Inventory_Management.Domain.Entities.Product
+        var product = new Entities.Product
         {
             Id = Guid.NewGuid(),
             Name = name,

@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection.Product.Commands.Create;
+using Microsoft.Extensions.DependencyInjection.Product.Commands.Delete;
 using Microsoft.Extensions.DependencyInjection.Product.Queries.GetCollection;
 using Microsoft.Extensions.DependencyInjection.Product.Queries.GetSingle;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,9 +17,6 @@ public class ProductsController: ControllerBase
         _mediator = mediator;
     }
     
-    /// Retrieve all users.
-    /// </summary>
-    /// <returns>A list of users.</returns>
     [HttpGet]
     //[Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
     [SwaggerOperation(Summary = "Get all products", Description = "Retrieve a list of all products.")]
@@ -39,6 +38,33 @@ public class ProductsController: ControllerBase
     {
         var product = await _mediator.Send(new GetProductQuery(id));
         return product == null ? NotFound() : Ok(product);
+    }
+
+    [HttpPost]
+    // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
+    [SwaggerOperation(Summary = "Add product", Description = "Create a new product.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Create([FromBody] ProductCreateCommand command)
+    {
+        var product = await _mediator.Send(command);
+        return Ok(product);
+    }
+
+    [HttpDelete]
+    // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
+    [SwaggerOperation(Summary = "Remove product", Description = "Delete a product.")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var command = new ProductDeleteCommand(id);
+        
+        await _mediator.Send(command);
+        
+        return NoContent();
     }
 
 }
