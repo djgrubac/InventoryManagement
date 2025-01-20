@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection.Product.Commands.Create;
 using Microsoft.Extensions.DependencyInjection.Product.Commands.Delete;
+using Microsoft.Extensions.DependencyInjection.Product.Commands.Update;
 using Microsoft.Extensions.DependencyInjection.Product.Queries.GetCollection;
 using Microsoft.Extensions.DependencyInjection.Product.Queries.GetSingle;
 using Swashbuckle.AspNetCore.Annotations;
@@ -52,6 +53,25 @@ public class ProductsController: ControllerBase
         return Ok(product);
     }
 
+    [HttpPut("{id:guid}")]
+    // [Authorize(Roles = "Admin")]
+    [SwaggerOperation(Summary = "Update product", Description = "Update an existing product by ID.")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> Update(Guid id, [FromBody] ProductUpdateCommand command)
+    {
+        if (id != command.Id)
+        {
+            return BadRequest("The product ID in the URL does not match the ID in the body.");
+        }
+        
+        await _mediator.Send(command);
+        
+        return NoContent();
+    }
+    
     [HttpDelete]
     // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
     [SwaggerOperation(Summary = "Remove product", Description = "Delete a product.")]
