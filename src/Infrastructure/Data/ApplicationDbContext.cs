@@ -2,6 +2,7 @@
 using Inventory_Management.Application.Common.Interfaces;
 using Inventory_Management.Domain.Entities;
 using Inventory_Management.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,20 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         base.OnModelCreating(builder);
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         
-        // builder.HasDefaultSchema("Inventory_Management");
+        builder.Entity<Product>(entity =>
+        {
+            entity.HasKey(p => p.Id);
+
+            builder.Entity<Product>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+
+                // Define the foreign key relationship
+                entity.HasOne<ApplicationUser>() 
+                    .WithMany()             
+                    .HasForeignKey(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });;
+        });
     }
 }

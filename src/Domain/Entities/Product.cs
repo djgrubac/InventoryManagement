@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace Inventory_Management.Domain.Entities;
 
 public class Product
@@ -7,4 +9,5 @@ public class Product
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? UserId { get; set; }
 }
