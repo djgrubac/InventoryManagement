@@ -24,7 +24,8 @@ public class GetProductQueryHandler:IRequestHandler<GetProductQuery, Products?>
             Id = product.Id,
             Name = product.Name,
             Price = product.Price,
-            StockQuantity = product.StockQuantity
+            StockQuantity = product.StockQuantity,
+            Description = product.Description
         };
     }
 }

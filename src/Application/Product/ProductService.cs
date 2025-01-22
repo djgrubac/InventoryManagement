@@ -14,7 +14,7 @@ public class ProductService: IProductService
         _productRepository = productRepository;
     }
     
-    public async Task<Guid> CreateProductAsync(string name, decimal price, int stockQuantity)
+    public async Task<Guid> CreateProductAsync(string name, decimal price, int stockQuantity, string description)
     {
         var product = new Entities.Product
         {
@@ -22,6 +22,7 @@ public class ProductService: IProductService
             Name = name,
             Price = price,
             StockQuantity = stockQuantity,
+            Description = description,
             CreatedAt = DateTime.UtcNow
         };
         await _productRepository.AddAsync(product);
@@ -36,7 +37,8 @@ public class ProductService: IProductService
             Id = product.Id,
             Name = product.Name,
             Price = product.Price,
-            StockQuantity = product.StockQuantity
+            StockQuantity = product.StockQuantity,
+            Description = product.Description
         });
     }
 
@@ -51,11 +53,12 @@ public class ProductService: IProductService
             Id = product.Id,
             Name = product.Name,
             Price = product.Price,
-            StockQuantity = product.StockQuantity
+            StockQuantity = product.StockQuantity,
+            Description = product.Description
         };
     }
 
-    public async Task UpdateProductAsync(Guid id, string name, decimal price, int stockQuantity)
+    public async Task UpdateProductAsync(Guid id, string name, decimal price, int stockQuantity, string description)
     {
         var product = await _productRepository.GetByIdAsync(id);
         if (product == null)
@@ -64,6 +67,7 @@ public class ProductService: IProductService
         product.Name = name;
         product.Price = price;
         product.StockQuantity = stockQuantity;
+        product.Description = description;
         
         await _productRepository.UpdateAsync(product);
     }

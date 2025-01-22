@@ -5,10 +5,10 @@ namespace Microsoft.Extensions.DependencyInjection.Product.Commands.Create;
 
 public class ProductCreateCommandHandler:IRequestHandler<ProductCreateCommand, Guid>
 {
-    private readonly IBaseRepository<Entities.Product> _producRepository;
-    public ProductCreateCommandHandler(IBaseRepository<Entities.Product> producRepository)
+    private readonly IBaseRepository<Entities.Product> _productRepository;
+    public ProductCreateCommandHandler(IBaseRepository<Entities.Product> productRepository)
     {
-        _producRepository = producRepository;
+        _productRepository = productRepository;
     }
     public async Task<Guid> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
     {
@@ -18,9 +18,10 @@ public class ProductCreateCommandHandler:IRequestHandler<ProductCreateCommand, G
             Name = request.Name,
             Price = request.Price,
             StockQuantity = request.StockQuantity,
+            Description = request.Description,
             CreatedAt = DateTime.UtcNow
         };
-        await _producRepository.AddAsync(product);
+        await _productRepository.AddAsync(product);
         return product.Id;
     }
 }

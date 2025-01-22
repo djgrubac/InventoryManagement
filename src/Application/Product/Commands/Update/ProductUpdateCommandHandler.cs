@@ -23,6 +23,7 @@ public class ProductUpdateCommandHandler: IRequestHandler<ProductUpdateCommand>
         product.Name = request.Name;
         product.Price = request.Price;
         product.StockQuantity = request.StockQuantity;
+        product.Description = request.Description;
         
         await _productRepository.UpdateAsync(product);
     }
