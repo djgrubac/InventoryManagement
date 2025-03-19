@@ -4,6 +4,8 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace Microsoft.Extensions.DependencyInjection.Controllers;
 
+[Route("api/[controller]")]
+[ApiController]
 public class ProductCategoriesController: ControllerBase
 {
     private readonly IMediator _mediator;
