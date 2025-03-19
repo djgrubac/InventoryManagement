@@ -53,6 +53,7 @@ public static class DependencyInjection
         
         // Register ProductRepository
         services.AddScoped<IBaseRepository<Entities.Product>, ProductRepository>();
+        services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 
         return services;
     }

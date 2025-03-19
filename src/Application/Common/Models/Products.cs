@@ -1,3 +1,5 @@
+using Inventory_Management.Application.Common.Models;
+
 namespace InventoryManagement.Core.DTO;
 
 public class Products

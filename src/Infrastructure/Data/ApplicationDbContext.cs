@@ -11,10 +11,8 @@ namespace Inventory_Management.Infrastructure.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     public DbSet<Product> Products { get; set; }
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-        
-    }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
     
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -28,13 +26,21 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
             builder.Entity<Product>(entity =>
             {
                 entity.HasKey(p => p.Id);
-
-                // Define the foreign key relationship
+                
                 entity.HasOne<ApplicationUser>() 
                     .WithMany()             
-                    .HasForeignKey(p => p.UserId)
+                    .HasForeignKey(u => u.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-            });;
+                
+                entity.HasOne<ProductCategory>()
+                    .WithMany()
+                    .HasForeignKey(pc => pc.ProductCategoryId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+        });
+        builder.Entity<ProductCategory>(entity =>
+        {
+            entity.HasKey(pc => pc.Id);
         });
     }
 }
