@@ -5,4 +5,5 @@ namespace Inventory_Management.Application.Common.Interfaces;
 public interface IProductCategoryRepository
 {
     Task<IEnumerable<ProductCategory>> GetAllAsync();
+    Task AddAsync(ProductCategory productCategory);
 }

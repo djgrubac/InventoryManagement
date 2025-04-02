@@ -41,6 +41,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         builder.Entity<ProductCategory>(entity =>
         {
             entity.HasKey(pc => pc.Id);
+            entity.Property(pc => pc.Caption).IsRequired();
+
         });
     }
 }

@@ -21,4 +21,15 @@ public class ProductCategoryService:IProductCategoryService
             Caption = pc.Caption
         });
     }
+
+    public async Task<Guid> CreateCategoryAsync(Guid id, string caption)
+    {
+        var product = new Entities.ProductCategory
+        {
+            Id = Guid.NewGuid(),
+            Caption = caption,
+        };
+            await _productCategoryRepository.AddAsync(product);
+            return product.Id;
+        }
 }

@@ -18,4 +18,10 @@ public class ProductCategoryRepository: IProductCategoryRepository
     {
         return await _context.ProductCategories.ToListAsync();
     }
+
+    public async Task AddAsync(ProductCategory entity)
+    {
+        await _context.ProductCategories.AddAsync(entity);
+        await _context.SaveChangesAsync();
+    }
 }
