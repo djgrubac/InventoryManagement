@@ -1,60 +1,56 @@
-﻿using CleanArchitecture.Infrastructure.Data;
-using Inventory_Management.Application.Common.Interfaces;
-using Inventory_Management.Domain.Constants;
-using Inventory_Management.Infrastructure.Data;
-using Inventory_Management.Infrastructure.Data.Interceptors;
-using Inventory_Management.Infrastructure.Identity;
-using InventoryManagement.Core.Interfaces;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Configuration;
-using Entities = Inventory_Management.Domain.Entities;
+﻿    using CleanArchitecture.Infrastructure.Data;
+    using Inventory_Management.Application.Common.Interfaces;
+    using Inventory_Management.Domain.Constants;
+    using Inventory_Management.Infrastructure.Data;
+    using Inventory_Management.Infrastructure.Data.Interceptors;
+    using Inventory_Management.Infrastructure.Identity;
+    using InventoryManagement.Core.Interfaces;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Diagnostics;
+    using Microsoft.Extensions.Configuration;
+    using Entities = Inventory_Management.Domain.Entities;
 
-namespace Microsoft.Extensions.DependencyInjection;
+    namespace Microsoft.Extensions.DependencyInjection;
 
-public static class DependencyInjection
-{
-    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static class DependencyInjection
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
-
-        Guard.Against.NullOrEmpty(connectionString, message: "Connection string 'DefaultConnection' not found.");
-
-        services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
-        services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
-        
-        services.AddIdentity<ApplicationUser, IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>()
-            .AddDefaultTokenProviders();
-
-
-        services.AddDbContext<ApplicationDbContext>((sp, options) =>
+        public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            Guard.Against.NullOrEmpty(connectionString, message: "Connection string 'DefaultConnection' not found.");
 
-            options.UseSqlite(connectionString);
-        });
-
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
-        services.AddScoped<ApplicationDbContextInitialiser>();
-
-        // services
-        //     .AddDefaultIdentity<ApplicationUser>()
-        //     .AddRoles<IdentityRole>()
-        //     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-        services.AddSingleton(TimeProvider.System);
-        services.AddTransient<IIdentityService, IdentityService>();
-
-        services.AddAuthorization(options =>
-            options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventsInterceptor>();
         
-        // Register ProductRepository
-        services.AddScoped<IBaseRepository<Entities.Product>, ProductRepository>();
-        services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
-        return services;
+            // Updated PostgreSQL configuration
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetServices<ISaveChangesInterceptor>());
+                options.UseNpgsql(
+                    connectionString,
+                    o => {
+                        o.MigrationsHistoryTable("__efmigrationshistory", "public");
+                        o.SetPostgresVersion(new Version(12, 0));
+                        o.EnableRetryOnFailure();
+                    });
+            });
+
+            services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+            services.AddScoped<ApplicationDbContextInitialiser>();
+            services.AddSingleton(TimeProvider.System);
+            services.AddTransient<IIdentityService, IdentityService>();
+
+            services.AddAuthorization(options =>
+                options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
+
+            services.AddScoped<IBaseRepository<Entities.Product>, ProductRepository>();
+            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+
+            return services;
+        }
     }
-}

@@ -19,6 +19,11 @@ public class ProductCategoryRepository: IProductCategoryRepository
         return await _context.ProductCategories.ToListAsync();
     }
 
+    public async Task<ProductCategory?> GetByIdAsync(Guid id)
+    {
+        return await _context.ProductCategories.FindAsync(id);
+    }
+
     public async Task AddAsync(ProductCategory entity)
     {
         await _context.ProductCategories.AddAsync(entity);
