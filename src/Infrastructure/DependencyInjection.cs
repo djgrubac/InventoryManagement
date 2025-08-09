@@ -49,7 +49,7 @@
                 options.AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator)));
 
             services.AddScoped<IBaseRepository<Entities.Product>, ProductRepository>();
-            services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
 
             return services;
         }

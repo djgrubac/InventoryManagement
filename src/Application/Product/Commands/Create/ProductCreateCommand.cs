@@ -1,6 +1,6 @@
 namespace Microsoft.Extensions.DependencyInjection.Product.Commands.Create;
 
-public class ProductCreateCommand: IRequest<Guid>
+public class ProductCreateCommand: IRequest<ProductCreateResponse>
 {
     public string? Name { get; set; }
     public Guid CategoryId { get; set; }

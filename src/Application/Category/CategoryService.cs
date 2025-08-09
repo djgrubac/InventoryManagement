@@ -5,11 +5,11 @@ using Models = Inventory_Management.Application.Common.Models;
 
 namespace Microsoft.Extensions.DependencyInjection.ProductCategory;
 
-public class ProductCategoryService:IProductCategoryService
+public class CategoryService:ICategoryService
 {
-    private readonly IBaseRepository<Entities.ProductCategory> _productCategoryRepository;
+    private readonly IBaseRepository<Entities.Category> _productCategoryRepository;
 
-    public ProductCategoryService(IBaseRepository<Entities.ProductCategory> productCategoryRepository)
+    public CategoryService(IBaseRepository<Entities.Category> productCategoryRepository)
     {
         _productCategoryRepository = productCategoryRepository;
     }
@@ -24,7 +24,7 @@ public class ProductCategoryService:IProductCategoryService
 
     public async Task<Guid> CreateCategoryAsync(Guid id, string caption)
     {
-        var product = new Entities.ProductCategory
+        var product = new Entities.Category
         {
             Id = Guid.NewGuid(),
             Caption = caption,

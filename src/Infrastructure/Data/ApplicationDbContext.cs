@@ -11,7 +11,7 @@ namespace Inventory_Management.Infrastructure.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     public DbSet<Product> Products { get; set; }
-    public DbSet<ProductCategory> ProductCategories { get; set; }
+    public DbSet<Category> ProductCategories { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -50,13 +50,13 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
                 .WithMany()
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne<ProductCategory>()
+            entity.HasOne<Category>()
                 .WithMany()
                 .HasForeignKey(pc => pc.ProductCategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
-        builder.Entity<ProductCategory>(entity =>
+        builder.Entity<Category>(entity =>
         {
             entity.ToTable("product_categories"); // Add lowercase table name
             entity.HasKey(pc => pc.Id);

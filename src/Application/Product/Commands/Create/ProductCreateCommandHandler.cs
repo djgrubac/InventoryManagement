@@ -4,20 +4,20 @@ using Entities = Inventory_Management.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection.Product.Commands.Create;
 
-public class ProductCreateCommandHandler:IRequestHandler<ProductCreateCommand, Guid>
+public class ProductCreateCommandHandler:IRequestHandler<ProductCreateCommand, ProductCreateResponse>
 {
     private readonly IBaseRepository<Entities.Product> _productRepository;
-    private readonly IProductCategoryRepository _productCategoryRepository;
+    private readonly ICategoryRepository _categoryRepository;
     private readonly IMediator _mediator;
-    public ProductCreateCommandHandler(IBaseRepository<Entities.Product> productRepository, IMediator mediator, IProductCategoryRepository productCategoryRepository)
+    public ProductCreateCommandHandler(IBaseRepository<Entities.Product> productRepository, IMediator mediator, ICategoryRepository categoryRepository)
     {
         _productRepository = productRepository;
         _mediator = mediator;
-        _productCategoryRepository = productCategoryRepository;
+        _categoryRepository = categoryRepository;
     }
-    public async Task<Guid> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
+    public async Task<ProductCreateResponse> Handle(ProductCreateCommand request, CancellationToken cancellationToken)
     {
-        var category = await _productCategoryRepository.GetByIdAsync(request.CategoryId);
+        var category = await _categoryRepository.GetByIdAsync(request.CategoryId);
         if (category == null)
         {
             throw new Exception($"Product category with ID {request.CategoryId} does not exist.");
@@ -35,6 +35,6 @@ public class ProductCreateCommandHandler:IRequestHandler<ProductCreateCommand, G
         };
         await _productRepository.AddAsync(product);
 
-        return product.Id;
+        return new ProductCreateResponse { Id = product.Id, Name = product.Name, };
     }
 }
