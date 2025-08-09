@@ -1,6 +1,6 @@
 namespace Inventory_Management.Application.Common.Models;
 
-public class ProductCategory
+public class Category
 {
     public string? Caption { get; set; }
 }

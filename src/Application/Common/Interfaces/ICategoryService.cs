@@ -4,6 +4,6 @@ namespace Inventory_Management.Application.Common.Interfaces;
 
 public interface ICategoryService
 {
-    Task<IEnumerable<ProductCategory>> GetAllAsync();
+    Task<IEnumerable<Category>> GetAllAsync();
     Task<Guid> CreateCategoryAsync(Guid id, string caption);
 }
