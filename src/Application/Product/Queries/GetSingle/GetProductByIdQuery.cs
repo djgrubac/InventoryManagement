@@ -2,11 +2,11 @@ using InventoryManagement.Core.DTO;
 
 namespace Microsoft.Extensions.DependencyInjection.Product.Queries.GetSingle;
 
-public class GetProductQuery:IRequest<Products?>
+public class GetProductByIdQuery:IRequest<ProductDTO?>
 {
     public Guid Id { get; set; }
 
-    public GetProductQuery(Guid id)
+    public GetProductByIdQuery(Guid id)
     {
         Id = id;
     }

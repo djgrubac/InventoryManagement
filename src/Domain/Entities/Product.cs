@@ -10,6 +10,7 @@ public class Product
     public Guid ProductCategoryId { get; set; }
     public int StockQuantity { get; set; }
     public string? Description { get; set; }
-    public string? UserId { get; set; }
+    public string? UserId { get; set; } //public string? Manufacturer
+    // public ICollection<Warehouse> Warehouses { get; set; } = new List<Warehouse>();
     public DateTime CreatedAt { get; set; }
 }

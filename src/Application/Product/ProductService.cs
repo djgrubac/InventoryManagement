@@ -29,10 +29,10 @@ public class ProductService: IProductService
         return product.Id;
     }
 
-    public async Task<IEnumerable<Products>> GetAllProductsAsync()
+    public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
     {
         var products = await _productRepository.GetAllAsync();
-        return products.Select(product => new Products
+        return products.Select(product => new ProductDTO
         {
             Id = product.Id,
             Name = product.Name,
@@ -42,13 +42,13 @@ public class ProductService: IProductService
         });
     }
 
-    public async Task<Products?> GetProductByIdAsync(Guid id)
+    public async Task<ProductDTO?> GetProductByIdAsync(Guid id)
     {
         var product = await _productRepository.GetByIdAsync(id);
         if(product == null)
             return null;
         
-        return new Products
+        return new ProductDTO
         {
             Id = product.Id,
             Name = product.Name,

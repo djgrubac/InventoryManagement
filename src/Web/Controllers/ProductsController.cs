@@ -31,13 +31,13 @@ public class ProductsController: ControllerBase
 
     [HttpGet("{id}")]
     // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
-    [SwaggerOperation(Summary = "Get product by ID", Description = "Retrieve the details of a specific product by ID.")]
+    [SwaggerOperation(Summary = "Get product by Id", Description = "Retrieve the details of a specific product by Id.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetProductById(Guid id)
     {
-        var product = await _mediator.Send(new GetProductQuery(id));
+        var product = await _mediator.Send(new GetProductByIdQuery(id));
         return product == null ? NotFound() : Ok(product);
     }
 
@@ -55,7 +55,7 @@ public class ProductsController: ControllerBase
 
     [HttpPut("{id:guid}")]
     // [Authorize(Roles = "Admin")]
-    [SwaggerOperation(Summary = "Update product", Description = "Update an existing product by ID.")]
+    [SwaggerOperation(Summary = "Update product", Description = "Update an existing product by Id.")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -64,7 +64,7 @@ public class ProductsController: ControllerBase
     {
         if (id != command.Id)
         {
-            return BadRequest("The product ID in the URL does not match the ID in the body.");
+            return BadRequest("The product Id in the URL does not match the Id in the body.");
         }
         
         await _mediator.Send(command);

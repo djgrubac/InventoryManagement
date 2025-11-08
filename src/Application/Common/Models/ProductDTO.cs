@@ -2,7 +2,7 @@ using Inventory_Management.Application.Common.Models;
 
 namespace InventoryManagement.Core.DTO;
 
-public class Products
+public class ProductDTO
 {
     public Guid Id { get; set; }
     public string? Name { get; set; }
