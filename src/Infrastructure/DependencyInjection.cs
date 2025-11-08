@@ -50,6 +50,7 @@
 
             services.AddScoped<IBaseRepository<Entities.Product>, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IBaseRepository<Entities.Warehouse>, WarehouseRepository>();
 
             return services;
         }

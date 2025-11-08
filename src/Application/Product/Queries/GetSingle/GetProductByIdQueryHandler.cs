@@ -4,22 +4,22 @@ using Entities = Inventory_Management.Domain.Entities;
 
 namespace Microsoft.Extensions.DependencyInjection.Product.Queries.GetSingle;
 
-public class GetProductQueryHandler:IRequestHandler<GetProductQuery, Products?>
+public class GetProductByIdQueryHandler:IRequestHandler<GetProductByIdQuery, ProductDTO?>
 {
     private readonly IBaseRepository<Entities.Product> _productRepository;
 
-    public GetProductQueryHandler(IBaseRepository<Entities.Product> productRepository)
+    public GetProductByIdQueryHandler(IBaseRepository<Entities.Product> productRepository)
     {
         _productRepository = productRepository;
     }
     
-    public async Task<Products?> Handle(GetProductQuery request, CancellationToken cancellationToken)
+    public async Task<ProductDTO?> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByIdAsync(request.Id);
         if(product == null)
             return null;
 
-        return new Products
+        return new ProductDTO
         {
             Id = product.Id,
             Name = product.Name,

@@ -13,10 +13,10 @@ public class CategoryService:ICategoryService
     {
         _productCategoryRepository = productCategoryRepository;
     }
-    public async Task<IEnumerable<Models.Category>> GetAllAsync()
+    public async Task<IEnumerable<Models.CategoryDTO>> GetAllAsync()
     {
         var productCategories = await _productCategoryRepository.GetAllAsync();
-        return productCategories.Select(pc => new Models.Category
+        return productCategories.Select(pc => new Models.CategoryDTO
         {
             Caption = pc.Caption
         });
