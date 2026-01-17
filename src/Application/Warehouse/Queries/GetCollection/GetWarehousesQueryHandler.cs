@@ -18,7 +18,7 @@ public class GetWarehousesQueryHandler:IRequestHandler<GetWarehousesQuery, IEnum
         var warehouses = await _warehouseRepository.GetAllAsync();
         return warehouses.Select(warehouses => new WarehouseDTO
         {
-            Id = warehouses.Id,
+            Uid = warehouses.Uid,
             Name = warehouses.Name,
             Address = warehouses.Address,
             ContactPerson = warehouses.ContactPerson

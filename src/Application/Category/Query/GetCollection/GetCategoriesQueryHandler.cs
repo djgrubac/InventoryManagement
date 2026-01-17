@@ -20,6 +20,7 @@ public class GetCategoriesQueryHandler:IRequestHandler<GetCategoriesQuery, IEnum
     
         return productCategories.Select(pc => new Models.CategoryDTO
         {
+            Uid = pc.Uid,
             Caption = pc.Caption
         });
     }

@@ -17,16 +17,15 @@ public class WarehouseService: IWarehouseService
     {
         var warehouse = new Entities.Warehouse
         {
-            Id = Guid.NewGuid(),
+            Uid = Guid.NewGuid(),
             Name = name,
             Address = address,
             ContactPerson = contactPerson,
             Company = company,
-            CreatedAt = DateTime.UtcNow
         };
         
         await _warehouseRepository.AddAsync(warehouse);
-        return warehouse.Id;
+        return warehouse.Uid;
     }
 
     public async Task<IEnumerable<WarehouseDTO>> GetAllWarehousesAsync()
@@ -34,21 +33,21 @@ public class WarehouseService: IWarehouseService
         var warehouses = await _warehouseRepository.GetAllAsync();
         return warehouses.Select(warehouses => new WarehouseDTO
         {
-            Id = warehouses.Id,
+            Uid = warehouses.Uid,
             Name = warehouses.Name,
             Address = warehouses.Address,
             ContactPerson = warehouses.ContactPerson
         });
     }
 
-    public async Task<WarehouseDTO?> GetWarehouseByIdAsync(Guid id)
+    public async Task<WarehouseDTO?> GetWarehouseByIdAsync(Guid uid)
     {
-        var warehouse = await _warehouseRepository.GetByIdAsync(id);
+        var warehouse = await _warehouseRepository.GetByUidAsync(uid);
         if (warehouse == null)
             return null;
         return new WarehouseDTO
         {
-            Id = warehouse.Id,
+            Uid = warehouse.Uid,
             Name = warehouse.Name,
             Address = warehouse.Address,
             ContactPerson = warehouse.ContactPerson

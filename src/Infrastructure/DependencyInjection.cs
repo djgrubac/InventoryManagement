@@ -4,6 +4,7 @@
     using Inventory_Management.Infrastructure.Data;
     using Inventory_Management.Infrastructure.Data.Interceptors;
     using Inventory_Management.Infrastructure.Identity;
+    using Inventory_Management.Infrastructure.Repositories;
     using InventoryManagement.Core.Interfaces;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -51,6 +52,7 @@
             services.AddScoped<IBaseRepository<Entities.Product>, ProductRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBaseRepository<Entities.Warehouse>, WarehouseRepository>();
+            services.AddScoped<IStockRepository, StockRepository>();
 
             return services;
         }

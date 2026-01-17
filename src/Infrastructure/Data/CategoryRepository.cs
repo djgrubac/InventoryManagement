@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Inventory_Management.Infrastructure.Data;
 
-public class CategoryRepository: ICategoryRepository
+public class CategoryRepository : ICategoryRepository
 {
     private readonly ApplicationDbContext _context;
 
@@ -16,17 +16,17 @@ public class CategoryRepository: ICategoryRepository
     
     public async Task<IEnumerable<Category>> GetAllAsync()
     {
-        return await _context.ProductCategories.ToListAsync();
+        return await _context.Categories.ToListAsync();
     }
 
-    public async Task<Category?> GetByIdAsync(Guid id)
+    public async Task<Category?> GetByUidAsync(Guid uid)
     {
-        return await _context.ProductCategories.FindAsync(id);
+        return await _context.Categories.FirstOrDefaultAsync(c=> c.Uid == uid);
     }
 
     public async Task AddAsync(Category entity)
     {
-        await _context.ProductCategories.AddAsync(entity);
+        await _context.Categories.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 }

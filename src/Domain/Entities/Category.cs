@@ -1,7 +1,7 @@
 namespace Inventory_Management.Domain.Entities;
 
-public class Category
+public class Category : BaseAuditableEntity
 {
-    public Guid Id { get; set; }
     public required string? Caption { get; set; }
+    public ICollection<Product> Products { get; set; } = new List<Product>();
 }

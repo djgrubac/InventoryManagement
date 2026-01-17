@@ -14,10 +14,10 @@ public class ProductUpdateCommandHandler: IRequestHandler<ProductUpdateCommand>
     
     public async Task Handle(ProductUpdateCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(request.Id);
+        var product = await _productRepository.GetByUidAsync(request.Uid);
         if (product == null)
         {
-            throw new KeyNotFoundException($"Product with ID {request.Id} not found.");
+            throw new KeyNotFoundException($"Product with Uid {request.Uid} not found.");
         }
         
         product.Name = request.Name;

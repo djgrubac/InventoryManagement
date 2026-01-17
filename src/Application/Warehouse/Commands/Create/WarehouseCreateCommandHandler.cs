@@ -16,23 +16,20 @@ public class WarehouseCreateCommandHandler:IRequestHandler<WarehouseCreateComman
     {
         var warehouse = new Entities.Warehouse
         {
-            Id = Guid.NewGuid(),
             Name = request.Name,
             Address = request.Address,
             ContactPerson = request.ContactPerson,
-            Company = request.Company,
-            CreatedAt = DateTime.UtcNow
+            Company = request.Company
         };
         await _warehouseRepository.AddAsync(warehouse);
 
         return new WarehouseCreateResponse
         {
-            Id = warehouse.Id,
+            Uid = warehouse.Uid,
             Name = warehouse.Name,
             Adress = warehouse.Address,
             ContactPerson = warehouse.ContactPerson,
-            Company = warehouse.Company,
-            CreatedAt = warehouse.CreatedAt
+            Company = warehouse.Company
         };
     }
 }

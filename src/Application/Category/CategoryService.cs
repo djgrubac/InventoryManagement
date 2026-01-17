@@ -18,18 +18,19 @@ public class CategoryService:ICategoryService
         var productCategories = await _productCategoryRepository.GetAllAsync();
         return productCategories.Select(pc => new Models.CategoryDTO
         {
+            Uid = pc.Uid,
             Caption = pc.Caption
         });
     }
 
-    public async Task<Guid> CreateCategoryAsync(Guid id, string caption)
+    public async Task<Guid> CreateCategoryAsync(Guid uid, string caption)
     {
         var product = new Entities.Category
         {
-            Id = Guid.NewGuid(),
-            Caption = caption,
+            Uid = new Guid(),
+            Caption = caption
         };
             await _productCategoryRepository.AddAsync(product);
-            return product.Id;
-        }
+            return product.Uid;
+    }
 }

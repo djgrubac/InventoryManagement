@@ -29,16 +29,15 @@ public class WarehousesController : ControllerBase
         return Ok(warehouses);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{uid}")]
     // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
-    [SwaggerOperation(Summary = "Get warehouse by Id",
-        Description = "Retrieve the details of a specific warehouse by Id.")]
+    [SwaggerOperation(Summary = "Get warehouse by Uid", Description = "Retrieve the details of a specific warehouse by Uid.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetWarehouseById([FromRoute] Guid id)
+    public async Task<IActionResult> GetWarehouseById([FromRoute] Guid uid)
     {
-        var warehouse = await _mediator.Send(new GetWarehouseByIdQuery(id));
+        var warehouse = await _mediator.Send(new GetWarehouseByIdQuery(uid));
         return warehouse == null ? NotFound() : Ok(warehouse);
     }
 
@@ -54,18 +53,18 @@ public class WarehousesController : ControllerBase
         return Ok(warehouse);
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{uid:guid}")]
     // [Authorize(Roles = "Admin")]
-    [SwaggerOperation(Summary = "Update warehouse", Description = "Update an existing warehouse by Id.")]
+    [SwaggerOperation(Summary = "Update warehouse", Description = "Update an existing warehouse by Uid.")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Update(Guid id, [FromBody] WarehouseUpdateCommand command)
+    public async Task<IActionResult> Update(Guid uid, [FromBody] WarehouseUpdateCommand command)
     {
-        if (id != command.Id)
+        if (uid != command.Uid)
         {
-            return BadRequest("The product Id in the URL does not match the Id in the body.");
+            return BadRequest("The warehouse Uid in the URL does not match the Uid in the body.");
         }
         
         await _mediator.Send(command);

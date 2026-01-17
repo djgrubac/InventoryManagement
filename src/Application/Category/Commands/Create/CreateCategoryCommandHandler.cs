@@ -21,6 +21,7 @@ public class CreateCategoryCommandHandler:IRequestHandler<CreateCategoryCommand,
         
         await _repository.AddAsync(category);
 
-        return new CategoryResponse { Id = category.Id, Caption = category.Caption, };
+        return new CategoryResponse { Uid = category.Uid, Caption = category.Caption, };
     }
 }
+    

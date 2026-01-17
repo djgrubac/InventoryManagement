@@ -29,15 +29,15 @@ public class ProductsController: ControllerBase
         return Ok(products);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{uid}")]
     // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
-    [SwaggerOperation(Summary = "Get product by Id", Description = "Retrieve the details of a specific product by Id.")]
+    [SwaggerOperation(Summary = "Get product by Uid", Description = "Retrieve the details of a specific product by Uid.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> GetProductById(Guid id)
+    public async Task<IActionResult> GetProductById(Guid uid)
     {
-        var product = await _mediator.Send(new GetProductByIdQuery(id));
+        var product = await _mediator.Send(new GetProductByUidQuery(uid));
         return product == null ? NotFound() : Ok(product);
     }
 
@@ -53,18 +53,18 @@ public class ProductsController: ControllerBase
         return Ok(product);
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{uid:guid}")]
     // [Authorize(Roles = "Admin")]
-    [SwaggerOperation(Summary = "Update product", Description = "Update an existing product by Id.")]
+    [SwaggerOperation(Summary = "Update product", Description = "Update an existing product by Uid.")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Update(Guid id, [FromBody] ProductUpdateCommand command)
+    public async Task<IActionResult> Update(Guid uid, [FromBody] ProductUpdateCommand command)
     {
-        if (id != command.Id)
+        if (uid != command.Uid)
         {
-            return BadRequest("The product Id in the URL does not match the Id in the body.");
+            return BadRequest("The product Uid in the URL does not match the Uid in the body.");
         }
         
         await _mediator.Send(command);
@@ -78,9 +78,9 @@ public class ProductsController: ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Delete(Guid id)
+    public async Task<IActionResult> Delete(Guid uid)
     {
-        var command = new ProductDeleteCommand(id);
+        var command = new ProductDeleteCommand(uid);
         
         await _mediator.Send(command);
         

@@ -6,5 +6,5 @@ public interface IWarehouseService
 {
     Task<Guid> CreateWarehouseAsync(string name, string address, string contactPerson, string company);
     Task<IEnumerable<WarehouseDTO>> GetAllWarehousesAsync();
-    Task<WarehouseDTO?> GetWarehouseByIdAsync(Guid id);
+    Task<WarehouseDTO?> GetWarehouseByIdAsync(Guid uid);
 }
