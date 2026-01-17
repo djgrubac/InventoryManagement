@@ -13,9 +13,9 @@ public class ProductRepository:IBaseRepository<Product>
         _context = context;
     }
 
-    public async Task<Product?> GetByIdAsync(Guid id)
+    public async Task<Product?> GetByUidAsync(Guid uid)
     {
-        return await _context.Products.FindAsync(id);
+        return await _context.Products.FirstOrDefaultAsync(p => p.Uid == uid);
     }
 
     public async Task<IEnumerable<Product>> GetAllAsync()
@@ -35,9 +35,9 @@ public class ProductRepository:IBaseRepository<Product>
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid uid)
     {
-        var product = await GetByIdAsync(id);
+        var product = await GetByUidAsync(uid);
         if (product != null)
         {
             _context.Products.Remove(product);

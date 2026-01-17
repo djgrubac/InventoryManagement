@@ -15,13 +15,13 @@ public class GetWarehouseByIdQueryHandler:IRequestHandler<GetWarehouseByIdQuery,
     
     public async Task<WarehouseDTO?> Handle(GetWarehouseByIdQuery request, CancellationToken cancellationToken)
     {
-        var warehouse = await _warehouseRepository.GetByIdAsync(request.Id);
+        var warehouse = await _warehouseRepository.GetByUidAsync(request.Uid);
         if (warehouse == null)
             return null;
         
         return new WarehouseDTO
         {
-            Id = warehouse.Id,
+            Uid = warehouse.Uid,
             Name = warehouse.Name,
             Address = warehouse.Address,
             ContactPerson = warehouse.ContactPerson,

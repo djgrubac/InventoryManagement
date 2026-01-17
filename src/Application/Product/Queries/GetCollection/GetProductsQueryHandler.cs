@@ -1,5 +1,5 @@
 using Inventory_Management.Application.Common.Interfaces;
-using InventoryManagement.Core.DTO;
+using Inventory_Management.Application.Common.Models;
 using InventoryManagement.Core.Interfaces;
 using Entities = Inventory_Management.Domain.Entities;
 
@@ -19,7 +19,7 @@ public class GetProductsQueryHandler:IRequestHandler<GetProductsQuery,IEnumerabl
         var products = await _productRepository.GetAllAsync();
         return products.Select(product=> new ProductDTO
         {
-            Id = product.Id,
+            Uid = product.Uid,
             Name = product.Name,
             Price = product.Price,
             StockQuantity = product.StockQuantity,

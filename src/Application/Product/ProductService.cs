@@ -1,4 +1,4 @@
-using InventoryManagement.Core.DTO;
+using Inventory_Management.Application.Common.Models;
 using Inventory_Management.Domain.Entities;
 using InventoryManagement.Core.Interfaces;
 using Entities = Inventory_Management.Domain.Entities;
@@ -9,7 +9,7 @@ public class ProductService: IProductService
 {
     private readonly IBaseRepository<Entities.Product> _productRepository;
 
-    public ProductService(IBaseRepository<Entities.Product> productRepository, IMapper mapper)
+    public ProductService(IBaseRepository<Entities.Product> productRepository)
     {
         _productRepository = productRepository;
     }
@@ -18,15 +18,13 @@ public class ProductService: IProductService
     {
         var product = new Entities.Product
         {
-            Id = Guid.NewGuid(),
             Name = name,
             Price = price,
             StockQuantity = stockQuantity,
             Description = description,
-            CreatedAt = DateTime.UtcNow
         };
         await _productRepository.AddAsync(product);
-        return product.Id;
+        return product.Uid;
     }
 
     public async Task<IEnumerable<ProductDTO>> GetAllProductsAsync()
@@ -34,7 +32,7 @@ public class ProductService: IProductService
         var products = await _productRepository.GetAllAsync();
         return products.Select(product => new ProductDTO
         {
-            Id = product.Id,
+            Uid = product.Uid,
             Name = product.Name,
             Price = product.Price,
             StockQuantity = product.StockQuantity,
@@ -42,15 +40,15 @@ public class ProductService: IProductService
         });
     }
 
-    public async Task<ProductDTO?> GetProductByIdAsync(Guid id)
+    public async Task<ProductDTO?> GetProductByUidAsync(Guid uid)
     {
-        var product = await _productRepository.GetByIdAsync(id);
+        var product = await _productRepository.GetByUidAsync(uid);
         if(product == null)
             return null;
         
         return new ProductDTO
         {
-            Id = product.Id,
+            Uid = product.Uid,
             Name = product.Name,
             Price = product.Price,
             StockQuantity = product.StockQuantity,
@@ -58,11 +56,11 @@ public class ProductService: IProductService
         };
     }
 
-    public async Task UpdateProductAsync(Guid id, string name, decimal price, int stockQuantity, string description)
+    public async Task UpdateProductAsync(Guid uid, string name, decimal price, int stockQuantity, string description)
     {
-        var product = await _productRepository.GetByIdAsync(id);
+        var product = await _productRepository.GetByUidAsync(uid);
         if (product == null)
-            throw new KeyNotFoundException($"Product with ID {id} not found.");
+            throw new KeyNotFoundException($"Product with Uid {uid} not found.");
         
         product.Name = name;
         product.Price = price;
@@ -72,8 +70,8 @@ public class ProductService: IProductService
         await _productRepository.UpdateAsync(product);
     }
 
-    public async Task DeleteProductAsync(Guid id)
+    public async Task DeleteProductAsync(Guid uid)
     {
-        await _productRepository.DeleteAsync(id);
+        await _productRepository.DeleteAsync(uid);
     }
 }

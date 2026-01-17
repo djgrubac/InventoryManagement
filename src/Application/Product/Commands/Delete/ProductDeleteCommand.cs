@@ -2,10 +2,10 @@ namespace Microsoft.Extensions.DependencyInjection.Product.Commands.Delete;
 
 public class ProductDeleteCommand: IRequest
 {
-    public Guid Id { get; set; }
+    public Guid Uid { get; set; }
 
-    public ProductDeleteCommand(Guid id)
+    public ProductDeleteCommand(Guid uid)
     {
-        Id = id;
+        Uid = uid;
     }
 }

@@ -11,8 +11,9 @@ namespace Inventory_Management.Infrastructure.Data;
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
 {
     public DbSet<Product> Products { get; set; }
-    public DbSet<Category> ProductCategories { get; set; }
+    public DbSet<Category> Categories { get; set; }
     public DbSet<Warehouse> Wearhouses { get; set; }
+    public DbSet<Stock> Stocks { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
@@ -26,18 +27,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     protected override void OnModelCreating(ModelBuilder builder)
     {
         // Configure schema and case-sensitivity for PostgreSQL
-        builder.HasDefaultSchema("public");
-        builder.HasAnnotation("Relational:HistoryTableName", "__efmigrationshistory");
-        builder.HasAnnotation("Relational:HistoryTableSchema", "public");
+        // builder.HasDefaultSchema("public");
+        // builder.HasAnnotation("Relational:HistoryTableName", "__Efmigrationshistory");
+        // builder.HasAnnotation("Relational:HistoryTableSchema", "public");
         
         // Configure Identity tables to use lowercase names
-        builder.Entity<ApplicationUser>().ToTable("aspnet_users");
-        builder.Entity<IdentityRole>().ToTable("aspnet_roles");
-        builder.Entity<IdentityUserRole<string>>().ToTable("aspnet_user_roles");
-        builder.Entity<IdentityUserClaim<string>>().ToTable("aspnet_user_claims");
-        builder.Entity<IdentityUserLogin<string>>().ToTable("aspnet_user_logins");
-        builder.Entity<IdentityUserToken<string>>().ToTable("aspnet_user_tokens");
-        builder.Entity<IdentityRoleClaim<string>>().ToTable("aspnet_role_claims");
+        builder.Entity<ApplicationUser>().ToTable("Aspnet_Users");
+        builder.Entity<IdentityRole>().ToTable("Aspnet_Roles");
+        builder.Entity<IdentityUserRole<string>>().ToTable("Aspnet_User_Roles");
+        builder.Entity<IdentityUserClaim<string>>().ToTable("Aspnet_User_Claims");
+        builder.Entity<IdentityUserLogin<string>>().ToTable("Aspnet_User_Logins");
+        builder.Entity<IdentityUserToken<string>>().ToTable("Aspnet_User_Tokens");
+        builder.Entity<IdentityRoleClaim<string>>().ToTable("Aspnet_Role_Claims");
 
         base.OnModelCreating(builder);
         
@@ -45,21 +46,18 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
 
         builder.Entity<Product>(entity =>
         {
-            entity.ToTable("products"); // Add lowercase table name
             entity.HasKey(p => p.Id);
-            entity.HasOne<ApplicationUser>()
-                .WithMany()
-                .HasForeignKey(u => u.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne<Category>()
-                .WithMany()
-                .HasForeignKey(pc => pc.ProductCategoryId)
+
+            entity.HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+
         builder.Entity<Category>(entity =>
         {
-            entity.ToTable("product_categories"); // Add lowercase table name
+            entity.ToTable("Categories");
             entity.HasKey(pc => pc.Id);
             entity.Property(pc => pc.Caption).IsRequired();
         });

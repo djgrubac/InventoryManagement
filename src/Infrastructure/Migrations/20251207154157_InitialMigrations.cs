@@ -7,20 +7,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Inventory_Management.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialPostgre : Migration
+    public partial class InitialMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "public");
-
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:PostgresExtension:citext", ",,");
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
-                schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "citext", nullable: false),
@@ -35,7 +31,6 @@ namespace Inventory_Management.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
-                schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "citext", nullable: false),
@@ -60,21 +55,46 @@ namespace Inventory_Management.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "product_categories",
-                schema: "public",
+                name: "ProductCategories",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Caption = table.Column<string>(type: "citext", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Caption = table.Column<string>(type: "citext", nullable: false),
+                    Uid = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "citext", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "citext", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_product_categories", x => x.Id);
+                    table.PrimaryKey("PK_ProductCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Wearhouses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "citext", nullable: true),
+                    Address = table.Column<string>(type: "citext", nullable: true),
+                    ContactPerson = table.Column<string>(type: "citext", nullable: true),
+                    Company = table.Column<string>(type: "citext", nullable: true),
+                    Uid = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "citext", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "citext", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wearhouses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
-                schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -89,7 +109,6 @@ namespace Inventory_Management.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "public",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -97,7 +116,6 @@ namespace Inventory_Management.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
-                schema: "public",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -112,7 +130,6 @@ namespace Inventory_Management.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "public",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -120,7 +137,6 @@ namespace Inventory_Management.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserLogins",
-                schema: "public",
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "citext", nullable: false),
@@ -134,7 +150,6 @@ namespace Inventory_Management.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "public",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -142,7 +157,6 @@ namespace Inventory_Management.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
-                schema: "public",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "citext", nullable: false),
@@ -154,14 +168,12 @@ namespace Inventory_Management.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
-                        principalSchema: "public",
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "public",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -169,7 +181,6 @@ namespace Inventory_Management.Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "AspNetUserTokens",
-                schema: "public",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "citext", nullable: false),
@@ -183,140 +194,160 @@ namespace Inventory_Management.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                         column: x => x.UserId,
-                        principalSchema: "public",
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "products",
-                schema: "public",
+                name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "citext", nullable: true),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    ProductCategoryId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ProductCategoryId = table.Column<int>(type: "integer", nullable: false),
                     StockQuantity = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "citext", nullable: true),
                     UserId = table.Column<string>(type: "citext", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CategoryId = table.Column<int>(type: "integer", nullable: true),
+                    Uid = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "citext", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "citext", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_products", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_products_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "public",
-                        principalTable: "AspNetUsers",
+                        name: "FK_Products_ProductCategories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "ProductCategories",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Stocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    WarehouseId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    Uid = table.Column<Guid>(type: "uuid", nullable: false),
+                    Created = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    CreatedBy = table.Column<string>(type: "citext", nullable: true),
+                    LastModified = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "citext", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Stocks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stocks_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_products_product_categories_ProductCategoryId",
-                        column: x => x.ProductCategoryId,
-                        principalSchema: "public",
-                        principalTable: "product_categories",
+                        name: "FK_Stocks_Wearhouses_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Wearhouses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
-                schema: "public",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
-                schema: "public",
                 table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
-                schema: "public",
                 table: "AspNetUserClaims",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserLogins_UserId",
-                schema: "public",
                 table: "AspNetUserLogins",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserRoles_RoleId",
-                schema: "public",
                 table: "AspNetUserRoles",
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
-                schema: "public",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
-                schema: "public",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_products_ProductCategoryId",
-                schema: "public",
-                table: "products",
-                column: "ProductCategoryId");
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_products_UserId",
-                schema: "public",
-                table: "products",
-                column: "UserId");
+                name: "IX_Stocks_ProductId",
+                table: "Stocks",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stocks_WarehouseId",
+                table: "Stocks",
+                column: "WarehouseId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims",
-                schema: "public");
+                name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserClaims",
-                schema: "public");
+                name: "AspNetUserClaims");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserLogins",
-                schema: "public");
+                name: "AspNetUserLogins");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles",
-                schema: "public");
+                name: "AspNetUserRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserTokens",
-                schema: "public");
+                name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "products",
-                schema: "public");
+                name: "Stocks");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles",
-                schema: "public");
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers",
-                schema: "public");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "product_categories",
-                schema: "public");
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "Wearhouses");
+
+            migrationBuilder.DropTable(
+                name: "ProductCategories");
         }
     }
 }

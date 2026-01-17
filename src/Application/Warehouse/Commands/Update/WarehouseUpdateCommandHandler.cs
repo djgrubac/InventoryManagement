@@ -14,17 +14,17 @@ public class WarehouseUpdateCommandHandler: IRequestHandler<WarehouseUpdateComma
 
     public async Task Handle(WarehouseUpdateCommand request, CancellationToken cancellationToken)
     {
-        var warehouse = await _warehouseRepository.GetByIdAsync(request.Id);
+        var warehouse = await _warehouseRepository.GetByUidAsync(request.Uid);
         if (warehouse == null)
         {
-            throw new KeyNotFoundException($"Warehouse with ID {request.Id} not found.");
+            throw new KeyNotFoundException($"Warehouse with Uid {request.Uid} not found.");
         }
         
-        warehouse.Id = request.Id;
         warehouse.Name = request.Name;
         warehouse.Address = request.Address;
         warehouse.ContactPerson = request.ContactPerson;
         warehouse.Company = request.Company;
+        warehouse.LastModified = DateTimeOffset.UtcNow;
         
         await _warehouseRepository.UpdateAsync(warehouse);
     }

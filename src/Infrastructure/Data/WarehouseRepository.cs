@@ -12,9 +12,9 @@ public class WarehouseRepository:IBaseRepository<Warehouse>
     {
         _context = context;
     }
-    public async Task<Warehouse?> GetByIdAsync(Guid id)
+    public async Task<Warehouse?> GetByUidAsync(Guid uid)
     {
-        return await _context.Wearhouses.FindAsync(id);
+        return await _context.Wearhouses.FirstOrDefaultAsync(w => w.Uid == uid);
     }
 
     public async Task<IEnumerable<Warehouse>> GetAllAsync()

@@ -1,4 +1,4 @@
-using InventoryManagement.Core.DTO;
+using Inventory_Management.Application.Common.Models;
 
 namespace Microsoft.Extensions.DependencyInjection.Product.Queries.GetCollection;
 
