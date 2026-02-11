@@ -41,11 +41,11 @@ public class StockRepository : IStockRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<Product?> GetByProductAsync(Guid productUid, CancellationToken cancellationToken = default)
-    {
-        return await _context.Products
-            .FirstOrDefaultAsync(p => p.Uid == productUid, cancellationToken);
-    }
+    // public async Task<Product?> GetByProductAsync(Guid productUid, CancellationToken cancellationToken = default)
+    // {
+    //     return await _context.Products
+    //         .FirstOrDefaultAsync(p => p.Uid == productUid, cancellationToken);
+    // }
 
     public async Task AddAsync(Stock stock)
     {

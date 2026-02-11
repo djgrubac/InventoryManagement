@@ -14,6 +14,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<Category> Categories { get; set; }
     public DbSet<Warehouse> Wearhouses { get; set; }
     public DbSet<Stock> Stocks { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<OrderItem> OrderItems { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
     
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
