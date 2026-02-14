@@ -53,6 +53,8 @@
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IBaseRepository<Entities.Warehouse>, WarehouseRepository>();
             services.AddScoped<IStockRepository, StockRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderItemRepository, OrderItemRepository>();
 
             return services;
         }
