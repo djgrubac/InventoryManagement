@@ -2,8 +2,8 @@ namespace Microsoft.Extensions.DependencyInjection.WarehouseStock.Queries.GetCol
 
 public class GetStocksQuery : IRequest<GetsStocksResult>
 {
-    public int PageNumber { get; set; }
-    public int PageSize { get; set; }
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
     public Guid? WarehouseUid { get; set; }
     public Guid? ProductUid { get; set; }
 }

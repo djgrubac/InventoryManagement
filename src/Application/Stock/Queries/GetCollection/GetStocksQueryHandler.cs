@@ -34,7 +34,5 @@ public class GetStocksQueryHandler : IRequestHandler<GetStocksQuery, GetsStocksR
             TotalCount= stocks.TotalCount,
             TotalPages = stocks.TotalPages
         };
-        
-        
     }
 }
