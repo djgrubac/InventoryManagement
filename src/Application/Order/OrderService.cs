@@ -59,12 +59,20 @@ public class OrderService : IOrderService
 
         var product = await _productRepository.GetByUidAsync(productUid) ?? throw new Exception("Product not found");
 
-        order.Items.Add(new OrderItem
+        var existingItem = order.Items.FirstOrDefault(i => i.ProductId == product.Id);
+        if (existingItem is not null)
         {
-            ProductId = product.Id,
-            Quantity = quantity,
-            Price = product.Price
-        });
+            existingItem.Quantity += quantity;
+        }
+        else
+        {
+            order.Items.Add(new OrderItem
+            {
+                ProductId = product.Id,
+                Quantity = quantity,
+                Price = product.Price
+            });
+        }
 
         order.TotalPrice = order.Items.Sum(i => i.Price * i.Quantity);
 
