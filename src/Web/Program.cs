@@ -1,4 +1,5 @@
 using CleanArchitecture.Infrastructure.Data;
+using Inventory_Management.Infrastructure.Identity;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -42,8 +43,8 @@ app.UseSwaggerUI(options =>
 
 // Other middlewares (e.g., authorization, health checks, etc.)
 app.UseHttpsRedirection();
-// app.UseAuthentication();
-app.UseAuthorization(); // Add authorization if required
+app.UseAuthentication();
+app.UseAuthorization(); //  Add authorization if required
 app.MapControllers(); // In case you have other controller-based routes
-
+app.MapIdentityApi<ApplicationUser>().WithTags("Authentication");
 app.Run();
