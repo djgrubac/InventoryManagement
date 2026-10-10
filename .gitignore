@@ -479,3 +479,6 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 .azure
+
+# Frontend lives in its own git repository
+inventory-management-web/
