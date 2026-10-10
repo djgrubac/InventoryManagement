@@ -21,6 +21,7 @@ public class GetProductsQueryHandler:IRequestHandler<GetProductsQuery,IEnumerabl
         {
             Uid = product.Uid,
             Name = product.Name,
+            CategoryUid = product.Category.Uid,
             Price = product.Price,
             StockQuantity = product.StockQuantity,
             Description = product.Description

@@ -7,6 +7,7 @@ public class ProductDTO
 {
     public Guid Uid { get; set; }
     public string? Name { get; set; }
+    public Guid CategoryUid { get; set; }
     public decimal? Price { get; set; }
     public int StockQuantity { get; set; }
     public string? Description { get; set; }
@@ -19,6 +20,7 @@ public class ProductDTO
             {
                 Uid = entity.Uid,
                 Name = entity.Name,
+                CategoryUid = entity.Category.Uid,
                 Price = entity.Price,
                 StockQuantity = entity.StockQuantity,
                 Description = entity.Description

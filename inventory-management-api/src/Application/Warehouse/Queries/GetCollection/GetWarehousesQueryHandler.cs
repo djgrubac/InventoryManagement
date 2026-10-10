@@ -19,6 +19,7 @@ public class GetWarehousesQueryHandler:IRequestHandler<GetWarehousesQuery, IEnum
         return warehouses.Select(warehouses => new WarehouseDTO
         {
             Uid = warehouses.Uid,
+            Company = warehouses.Company,
             Name = warehouses.Name,
             Address = warehouses.Address,
             ContactPerson = warehouses.ContactPerson

@@ -27,7 +27,7 @@ public class WarehouseCreateCommandHandler:IRequestHandler<WarehouseCreateComman
         {
             Uid = warehouse.Uid,
             Name = warehouse.Name,
-            Adress = warehouse.Address,
+            Address = warehouse.Address,
             ContactPerson = warehouse.ContactPerson,
             Company = warehouse.Company
         };

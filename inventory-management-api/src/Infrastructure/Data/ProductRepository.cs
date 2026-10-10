@@ -15,12 +15,16 @@ public class ProductRepository:IBaseRepository<Product>
 
     public async Task<Product?> GetByUidAsync(Guid uid)
     {
-        return await _context.Products.FirstOrDefaultAsync(p => p.Uid == uid);
+        return await _context.Products
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.Uid == uid);
     }
 
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
-        return await _context.Products.ToListAsync();
+        return await _context.Products
+            .Include(p => p.Category)
+            .ToListAsync();
     }
 
     public async Task AddAsync(Product entity)

@@ -1,3 +1,4 @@
+using Inventory_Management.Application.Common.Interfaces;
 using InventoryManagement.Core.Interfaces;
 using Entities = Inventory_Management.Domain.Entities;
 
@@ -6,10 +7,12 @@ namespace Microsoft.Extensions.DependencyInjection.Product.Commands.Update;
 public class ProductUpdateCommandHandler: IRequestHandler<ProductUpdateCommand>
 {
     private readonly IBaseRepository<Entities.Product> _productRepository;
+    private readonly ICategoryRepository _categoryRepository;
 
-    public ProductUpdateCommandHandler(IBaseRepository<Entities.Product> productRepository)
+    public ProductUpdateCommandHandler(IBaseRepository<Entities.Product> productRepository, ICategoryRepository categoryRepository)
     {
         _productRepository = productRepository;
+        _categoryRepository = categoryRepository;
     }
     
     public async Task Handle(ProductUpdateCommand request, CancellationToken cancellationToken)
@@ -20,6 +23,14 @@ public class ProductUpdateCommandHandler: IRequestHandler<ProductUpdateCommand>
             throw new KeyNotFoundException($"Product with Uid {request.Uid} not found.");
         }
         
+        var category = await _categoryRepository.GetByUidAsync(request.CategoryUid);
+        if (category == null)
+        {
+            throw new KeyNotFoundException($"Category with Uid {request.CategoryUid} not found.");
+        }
+
+        product.Category = category;
+        product.CategoryId = category.Id;
         product.Name = request.Name;
         product.Price = request.Price;
         product.StockQuantity = request.StockQuantity;

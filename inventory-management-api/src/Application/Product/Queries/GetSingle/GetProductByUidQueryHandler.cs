@@ -23,6 +23,7 @@ public class GetProductByUidQueryHandler:IRequestHandler<GetProductByUidQuery, P
         {
             Uid = product.Uid,
             Name = product.Name,
+            CategoryUid = product.Category.Uid,
             Price = product.Price,
             StockQuantity = product.StockQuantity,
             Description = product.Description

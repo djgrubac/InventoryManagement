@@ -11,6 +11,17 @@ builder.Services.AddApplicationServices();  // Assuming this includes services l
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebServices();
 
+// Allow the local Vite dev server to call this API from the browser.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("WebApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 
 // Register endpoint services (for API routing)
 builder.Services.AddEndpointsApiExplorer(); // Enable endpoint routing discovery
@@ -43,6 +54,7 @@ app.UseSwaggerUI(options =>
 
 // Other middlewares (e.g., authorization, health checks, etc.)
 app.UseHttpsRedirection();
+app.UseCors("WebApp");
 app.UseAuthentication();
 app.UseAuthorization(); //  Add authorization if required
 app.MapControllers(); // In case you have other controller-based routes

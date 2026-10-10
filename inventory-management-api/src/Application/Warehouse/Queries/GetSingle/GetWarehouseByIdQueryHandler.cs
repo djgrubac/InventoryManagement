@@ -22,6 +22,7 @@ public class GetWarehouseByIdQueryHandler:IRequestHandler<GetWarehouseByIdQuery,
         return new WarehouseDTO
         {
             Uid = warehouse.Uid,
+            Company = warehouse.Company,
             Name = warehouse.Name,
             Address = warehouse.Address,
             ContactPerson = warehouse.ContactPerson,

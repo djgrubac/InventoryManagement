@@ -72,7 +72,7 @@ public class ProductsController: ControllerBase
         return NoContent();
     }
     
-    [HttpDelete]
+    [HttpDelete("{uid:guid}")]
     // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
     [SwaggerOperation(Summary = "Remove product", Description = "Delete a product.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
