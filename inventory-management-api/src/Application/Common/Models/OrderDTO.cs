@@ -12,7 +12,7 @@ public class OrderDTO
     public required WarehouseDTO Warehouse { get; init; }
     public required decimal TotalPrice { get; init; }
     public required List<OrderItemDTO> Items { get; init; }
-    public required DateTime Created { get; init; }
+    public required DateTimeOffset Created { get; init; }
     
     public static Expression<Func<Order, OrderDTO>> Projection
     {
@@ -27,6 +27,7 @@ public class OrderDTO
                 {
                     Uid = entity.Warehouse.Uid,
                     Name = entity.Warehouse.Name ?? string.Empty,
+                    Company = entity.Warehouse.Company,
                     Address = entity.Warehouse.Address,
                     ContactPerson = entity.Warehouse.ContactPerson
                 },
@@ -45,7 +46,7 @@ public class OrderDTO
                     UnitPrice = i.Price,
                     Total = i.Price * i.Quantity
                 }).ToList(),
-                Created = entity.Created.DateTime
+                Created = entity.Created
             };
         }
     }

@@ -36,6 +36,16 @@ public class OrdersController : ControllerBase
         );
     }
 
+    [HttpGet]
+    [ProducesResponseType(typeof(GetOrdersResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetOrders([FromQuery] GetOrdersQuery query)
+    {
+        var result = await _mediator.Send(query);
+
+        return Ok(result);
+    }
+
     [HttpGet("{uid}")]
     [ProducesResponseType(typeof(OrderDTO), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

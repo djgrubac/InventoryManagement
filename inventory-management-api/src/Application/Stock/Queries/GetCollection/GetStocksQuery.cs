@@ -6,4 +6,5 @@ public class GetStocksQuery : IRequest<GetsStocksResult>
     public int PageSize { get; set; } = 10;
     public Guid? WarehouseUid { get; set; }
     public Guid? ProductUid { get; set; }
+    public Guid? CategoryUid { get; set; }
 }
