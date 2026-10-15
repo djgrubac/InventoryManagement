@@ -14,23 +14,23 @@ public class WarehouseRepository:IBaseRepository<Warehouse>
     }
     public async Task<Warehouse?> GetByUidAsync(Guid uid)
     {
-        return await _context.Wearhouses.FirstOrDefaultAsync(w => w.Uid == uid);
+        return await _context.Warehouses.FirstOrDefaultAsync(w => w.Uid == uid);
     }
 
     public async Task<IEnumerable<Warehouse>> GetAllAsync()
     {
-        return await _context.Wearhouses.ToListAsync();
+        return await _context.Warehouses.ToListAsync();
     }
 
     public async Task AddAsync(Warehouse entity)
     {
-        await _context.Wearhouses.AddAsync(entity);
+        await _context.Warehouses.AddAsync(entity);
         await _context.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(Warehouse entity)
     {
-        _context.Wearhouses.Update(entity);
+        _context.Warehouses.Update(entity);
         await _context.SaveChangesAsync();
     }
 

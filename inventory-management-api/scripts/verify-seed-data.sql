@@ -6,7 +6,7 @@
 
 \echo '=== Row counts'
 SELECT 'Categories' AS "table", count(*) FROM "Categories"
-UNION ALL SELECT 'Wearhouses', count(*) FROM "Wearhouses"
+UNION ALL SELECT 'Warehouses', count(*) FROM "Warehouses"
 UNION ALL SELECT 'Products',   count(*) FROM "Products"
 UNION ALL SELECT 'Stocks',     count(*) FROM "Stocks"
 UNION ALL SELECT 'Orders',     count(*) FROM "Orders"
@@ -69,7 +69,7 @@ SELECT extract(year FROM "Created")::int AS year, "Type", "Status", count(*) AS 
 
 \echo '=== Warehouses'
 SELECT w."Id", w."Name", s.products_in_stock, s.units, o.orders
-  FROM "Wearhouses" w
+  FROM "Warehouses" w
   LEFT JOIN (SELECT "WarehouseId", count(*) FILTER (WHERE "Quantity" > 0) AS products_in_stock,
                     sum("Quantity") AS units
                FROM "Stocks" GROUP BY 1) s ON s."WarehouseId" = w."Id"

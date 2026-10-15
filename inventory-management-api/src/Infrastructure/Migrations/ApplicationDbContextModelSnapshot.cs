@@ -267,7 +267,7 @@ namespace Inventory_Management.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Wearhouses");
+                    b.ToTable("Warehouses");
                 });
 
             modelBuilder.Entity("Inventory_Management.Infrastructure.Identity.ApplicationUser", b =>
