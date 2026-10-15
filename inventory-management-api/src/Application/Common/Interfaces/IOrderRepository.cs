@@ -4,6 +4,7 @@ namespace Inventory_Management.Application.Common.Interfaces;
 
 public interface IOrderRepository
 {
+    IQueryable<Order> Query();
     Task<Order?> GetByUidAsync(Guid uid);
     Task<Order?> GetByIdAsync(int id);
     Task<IEnumerable<Order>> GetAllAsync();

@@ -1,3 +1,4 @@
+using ValidationException = Inventory_Management.Application.Common.Exceptions.ValidationException;
 using Inventory_Management.Application.Common.Interfaces;
 using Inventory_Management.Domain.Enums;
 
@@ -16,17 +17,17 @@ public class RemoveOrderItemCommandHandler : IRequestHandler<RemoveOrderItemComm
     {
         // Validate order exists
         var order = await _orderRepository.GetByUidAsync(request.OrderUid)
-                    ?? throw new NotFoundException("Order", request.OrderUid.ToString());
+                    ?? throw new NotFoundException(request.OrderUid.ToString(), "Order");
 
         // Prevent modification of completed or cancelled orders
         if (order.Status == OrderStatus.Completed || order.Status == OrderStatus.Cancelled)
-            throw new InvalidOperationException($"Cannot remove items from {order.Status} order");
+            throw new ValidationException(nameof(request.OrderUid), $"Cannot remove items from a {order.Status} order.");
 
         // Find the item to remove
         var itemToRemove = order.Items.FirstOrDefault(i => i.Product.Uid == request.ProductUid);
         
         if (itemToRemove == null)
-            throw new NotFoundException("OrderItem", request.ProductUid.ToString());
+            throw new NotFoundException(request.ProductUid.ToString(), "OrderItem");
 
         // Remove the item
         order.Items.Remove(itemToRemove);

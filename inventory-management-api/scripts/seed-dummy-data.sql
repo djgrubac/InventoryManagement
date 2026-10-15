@@ -454,12 +454,12 @@ INSERT INTO seed_wh_def (name, address, contact, profile, size) VALUES
     ('Leskovac Regional Warehouse',       'Bulevar oslobodjenja 220, Leskovac',  'Ana',      'regional',   0.8),
     ('Valjevo Regional Warehouse',        'Karadjordjeva 150, Valjevo',          'Petar',    'regional',   0.7);
 
-INSERT INTO "Wearhouses" ("Uid", "Name", "Address", "ContactPerson", "Company",
+INSERT INTO "Warehouses" ("Uid", "Name", "Address", "ContactPerson", "Company",
                           "Created", "CreatedBy", "LastModified", "LastModifiedBy")
 SELECT gen_random_uuid(), w.name, w.address, w.contact, 'Inventory inc', t, u.ids[1], t, u.ids[1]
   FROM seed_wh_def w, seed_users u, (SELECT :'history_start'::timestamptz - interval '40 days' AS t) x
  WHERE w.ord <= :new_warehouses
-   AND NOT EXISTS (SELECT 1 FROM "Wearhouses" e WHERE e."Name" = w.name);
+   AND NOT EXISTS (SELECT 1 FROM "Warehouses" e WHERE e."Name" = w.name);
 
 -- every warehouse takes part; ones not defined above get a profile here
 CREATE TEMP TABLE seed_wh ON COMMIT DROP AS
@@ -467,7 +467,7 @@ SELECT e."Id" AS wh_id,
        COALESCE(d.profile, CASE e."Name" WHEN 'Main Warehouse' THEN 'hub' ELSE 'regional' END) AS profile,
        COALESCE(d.size,    CASE e."Name" WHEN 'Main Warehouse' THEN 2.0 ELSE 0.8 END)          AS size,
        :'history_start'::timestamptz - interval '7 days' + interval '7 hours' + random() * interval '5 days' AS opening_at
-  FROM "Wearhouses" e LEFT JOIN seed_wh_def d ON d.name = e."Name";
+  FROM "Warehouses" e LEFT JOIN seed_wh_def d ON d.name = e."Name";
 
 -- share of each division's catalog a warehouse profile carries
 CREATE TEMP TABLE seed_coverage (profile text, division text, coverage numeric) ON COMMIT DROP;
@@ -759,11 +759,11 @@ UPDATE "Products" p
 
 COMMIT;
 
-ANALYZE "Categories"; ANALYZE "Products"; ANALYZE "Wearhouses";
+ANALYZE "Categories"; ANALYZE "Products"; ANALYZE "Warehouses";
 ANALYZE "Stocks"; ANALYZE "Orders"; ANALYZE "OrderItems";
 
 SELECT 'Categories' AS "table", count(*) FROM "Categories"
-UNION ALL SELECT 'Wearhouses', count(*) FROM "Wearhouses"
+UNION ALL SELECT 'Warehouses', count(*) FROM "Warehouses"
 UNION ALL SELECT 'Products',   count(*) FROM "Products"
 UNION ALL SELECT 'Stocks',     count(*) FROM "Stocks"
 UNION ALL SELECT 'Orders',     count(*) FROM "Orders"

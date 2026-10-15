@@ -52,6 +52,9 @@ app.UseSwaggerUI(options =>
 });
 
 
+// Maps ValidationException/NotFoundException etc. to 4xx responses via CustomExceptionHandler.
+app.UseExceptionHandler(_ => { });
+
 // Other middlewares (e.g., authorization, health checks, etc.)
 app.UseHttpsRedirection();
 app.UseCors("WebApp");

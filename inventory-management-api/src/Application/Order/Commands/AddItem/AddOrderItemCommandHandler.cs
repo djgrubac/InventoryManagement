@@ -1,4 +1,6 @@
+using ValidationException = Inventory_Management.Application.Common.Exceptions.ValidationException;
 using Inventory_Management.Application.Common.Interfaces;
+using Inventory_Management.Domain.Enums;
 using InventoryManagement.Core.Interfaces;
 using Entities = Inventory_Management.Domain.Entities;
 
@@ -20,24 +22,16 @@ public class AddOrderItemCommandHandler : IRequestHandler<AddOrderItemCommand>
     public async Task Handle(AddOrderItemCommand request, CancellationToken cancellationToken)
     {
         // Validate order exists
-        var order = await _orderRepository.GetByUidAsync(request.OrderUid);
-        if (order == null)
-        {
-            throw new ArgumentException($"Order with UID {request.OrderUid} not found.");
-        }
+        var order = await _orderRepository.GetByUidAsync(request.OrderUid)
+                    ?? throw new NotFoundException(request.OrderUid.ToString(), "Order");
+
+        // Only pending orders can be edited
+        if (order.Status != OrderStatus.Pending)
+            throw new ValidationException(nameof(request.OrderUid), $"Cannot add items to a {order.Status} order.");
 
         // Validate product exists
-        var product = await _productRepository.GetByUidAsync(request.ProductUid);
-        if (product == null)
-        {
-            throw new ArgumentException($"Product with UID {request.ProductUid} not found.");
-        }
-
-        // Validate quantity
-        if (request.Quantity <= 0)
-        {
-            throw new ArgumentException("Quantity must be greater than zero.");
-        }
+        var product = await _productRepository.GetByUidAsync(request.ProductUid)
+                      ?? throw new NotFoundException(request.ProductUid.ToString(), "Product");
 
         // Check if product already exists in order items
         var existingItem = order.Items.FirstOrDefault(i => i.Product.Uid == request.ProductUid);

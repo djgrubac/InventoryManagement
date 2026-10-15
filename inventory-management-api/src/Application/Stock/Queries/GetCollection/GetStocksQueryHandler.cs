@@ -22,9 +22,15 @@ public class GetStocksQueryHandler : IRequestHandler<GetStocksQuery, GetsStocksR
 
         if (request.ProductUid.HasValue)
             query = query.Where(s => s.Product.Uid == request.ProductUid.Value);
+
+        if (request.CategoryUid.HasValue)
+            query = query.Where(s => s.Product.Category.Uid == request.CategoryUid.Value);
+
+        // Paging needs a deterministic order, otherwise rows can repeat or go missing between pages.
+        query = query.OrderBy(s => s.Warehouse.Name).ThenBy(s => s.Product.Name).ThenBy(s => s.Id);
         
         var stocks = await PaginatedList<StockDTO>
-            .CreateAsync(query.Select(StockDTO.Projection), request.PageNumber, request.PageSize);
+            .CreateAsync(query.Select(StockDTO.Projection), request.PageNumber, request.PageSize, cancellationToken);
         
         return new GetsStocksResult
         {
