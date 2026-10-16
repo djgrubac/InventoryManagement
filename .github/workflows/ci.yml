@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  SOLUTION: Inventory Management.sln
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
+defaults:
+  run:
+    working-directory: inventory-management-api
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: inventory-management-api/global.json
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('inventory-management-api/Directory.Packages.props', 'inventory-management-api/**/*.csproj', 'inventory-management-api/.config/dotnet-tools.json') }}
+          restore-keys: nuget-${{ runner.os }}-
+
+      - name: Restore
+        run: |
+          dotnet restore "$SOLUTION"
+          dotnet tool restore
+
+      - name: Build
+        run: dotnet build "$SOLUTION" --configuration Release --no-restore
+
+      - name: Test
+        run: >
+          dotnet test "$SOLUTION" --configuration Release --no-build
+          --logger trx --results-directory TestResults
+          --collect:"XPlat Code Coverage"
+
+      - name: Check for missing EF migrations
+        run: >
+          dotnet ef migrations has-pending-model-changes
+          --project src/Infrastructure --startup-project src/Web
+          --no-build --configuration Release
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: inventory-management-api/TestResults/
+          if-no-files-found: ignore
