@@ -1,5 +1,7 @@
 ﻿# Inventory_Management
 
+[![CI](https://github.com/djgrubac/inventory-management-api/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/djgrubac/inventory-management-api/actions/workflows/ci.yml)
+
 The project was generated using the [Clean.Architecture.Solution.Template](https://github.com/jasontaylordev/Inventory_Management) version 8.0.6.
 
 ## Build
@@ -47,24 +49,24 @@ dotnet new install Clean.Architecture.Solution.Template::8.0.6
 
 ## Test
 
-The solution contains unit, integration, functional, and acceptance tests.
+The solution contains unit tests (`tests/Application.UnitTests`) and integration tests (`tests/Application.IntegrationTests`). The integration tests run against an in-memory SQLite database, so no Postgres instance is needed.
 
-To run the unit, integration, and functional tests (excluding acceptance tests):
+To run all tests:
 ```bash
-dotnet test --filter "FullyQualifiedName!~AcceptanceTests"
-```
-
-To run the acceptance tests, first start the application:
-
-```bash
-cd .\src\Web\
-dotnet run
-```
-
-Then, in a new console, run the tests:
-```bash
-cd .\src\Web\
 dotnet test
+```
+
+## CI
+
+GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs on every pull request to `master` and every push to `master`. It:
+
+1. Restores and builds the solution in Release (warnings are treated as errors).
+2. Runs all unit and integration tests and uploads the test results and coverage as the `test-results` artifact.
+3. Fails if the EF Core model has changes without a migration. To run the same check locally:
+
+```bash
+dotnet tool restore
+dotnet ef migrations has-pending-model-changes --project src/Infrastructure --startup-project src/Web
 ```
 
 ## Help
