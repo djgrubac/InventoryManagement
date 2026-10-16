@@ -25,4 +25,10 @@ public class OrderItemRepository : IOrderItemRepository
             .Where(i => i.OrderId == orderId)
             .ToListAsync();
     }
+
+    public async Task<bool> AnyForProductAsync(int productId, CancellationToken cancellationToken = default)
+    {
+        return await _context.OrderItems
+            .AnyAsync(i => i.ProductId == productId, cancellationToken);
+    }
 }

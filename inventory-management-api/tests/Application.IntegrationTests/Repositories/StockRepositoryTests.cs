@@ -102,4 +102,18 @@ public class StockRepositoryTests : IntegrationTestBase
         stocks[0].Product.Name.Should().Be("Hammer");
         stocks[0].Warehouse.Name.Should().Be("North");
     }
+
+    [Test]
+    public async Task AnyOnHandForProductAsync_IgnoresEmptyRowsAndOtherProducts()
+    {
+        var category = TestData.Category();
+        var hammer = TestData.Product(category, "Hammer");
+        var saw = TestData.Product(category, "Saw");
+        var warehouse = TestData.Warehouse();
+        await SeedAsync(TestData.Stock(hammer, warehouse, 0), TestData.Stock(saw, warehouse, 4));
+        var repository = new StockRepository(CreateContext());
+
+        (await repository.AnyOnHandForProductAsync(hammer.Id)).Should().BeFalse();
+        (await repository.AnyOnHandForProductAsync(saw.Id)).Should().BeTrue();
+    }
 }

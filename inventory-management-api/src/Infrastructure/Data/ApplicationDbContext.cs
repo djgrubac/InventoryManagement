@@ -56,6 +56,20 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
                 .OnDelete(DeleteBehavior.Restrict);
         });
 
+        // Order lines are history: a product that has been ordered must not be deleted.
+        builder.Entity<OrderItem>()
+            .HasOne(i => i.Product)
+            .WithMany()
+            .HasForeignKey(i => i.ProductId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Stock rows are current state, not history, so empty ones may cascade with the product.
+        // ProductDeleteCommandHandler refuses the delete while any warehouse still holds stock.
+        builder.Entity<Stock>()
+            .HasOne(s => s.Product)
+            .WithMany()
+            .HasForeignKey(s => s.ProductId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Entity<Category>(entity =>
         {

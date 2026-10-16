@@ -488,7 +488,7 @@ namespace Inventory_Management.Infrastructure.Migrations
                     b.HasOne("Inventory_Management.Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Order");

@@ -101,7 +101,6 @@ public class ProductRepositoryTests : IntegrationTestBase
     }
 
     [Test]
-    [Ignore("Known bug: OrderItem->Product is DeleteBehavior.Cascade, so deleting a product silently deletes historical order lines. Needs a Restrict (or soft delete) mapping plus a migration.")]
     public async Task DeleteAsync_ProductOnExistingOrder_KeepsOrderHistory()
     {
         var product = TestData.Product(TestData.Category(), price: 5m);
@@ -118,5 +117,17 @@ public class ProductRepositoryTests : IntegrationTestBase
         }
 
         (await CreateContext().OrderItems.CountAsync(i => i.OrderId == order.Id)).Should().Be(1);
+    }
+
+    [Test]
+    public async Task DeleteAsync_ProductWithEmptyStockRows_CascadesThem()
+    {
+        var product = TestData.Product(TestData.Category());
+        await SeedAsync(TestData.Stock(product, TestData.Warehouse(), 0));
+
+        await new ProductRepository(CreateContext()).DeleteAsync(product.Uid);
+
+        (await CreateContext().Products.AnyAsync(p => p.Uid == product.Uid)).Should().BeFalse();
+        (await CreateContext().Stocks.AnyAsync()).Should().BeFalse();
     }
 }

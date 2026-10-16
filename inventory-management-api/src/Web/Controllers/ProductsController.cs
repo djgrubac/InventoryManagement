@@ -74,8 +74,9 @@ public class ProductsController: ControllerBase
     
     [HttpDelete("{uid:guid}")]
     // [Authorize/*(Roles = "Admin")*/] // Uncomment if admin-only access is required
-    [SwaggerOperation(Summary = "Remove product", Description = "Delete a product.")]
+    [SwaggerOperation(Summary = "Remove product", Description = "Delete a product. Refused with 400 if the product appears on an order or a warehouse still holds stock of it.")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Delete(Guid uid)
