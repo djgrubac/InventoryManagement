@@ -58,7 +58,7 @@ dotnet test
 
 ## CI
 
-GitHub Actions ([.github/workflows/ci.yml](.github/workflows/ci.yml)) runs on every pull request to `master` and every push to `master`. It:
+GitHub Actions ([.github/workflows/ci.yml](../.github/workflows/ci.yml), at the repo root) runs on every pull request to `master` and every push to `master`. It:
 
 1. Restores and builds the solution in Release (warnings are treated as errors).
 2. Runs all unit and integration tests and uploads the test results and coverage as the `test-results` artifact.
