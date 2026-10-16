@@ -17,6 +17,7 @@ public class StockDTO
                 {
                     Uid = entity.Warehouse.Uid,
                     Name = entity.Warehouse.Name ?? string.Empty,
+                    Company = entity.Warehouse.Company,
                     Address = entity.Warehouse.Address,
                     ContactPerson = entity.Warehouse.ContactPerson
                 },
