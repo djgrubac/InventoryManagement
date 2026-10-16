@@ -6,4 +6,5 @@ public interface IOrderItemRepository
 {
     Task AddAsync(OrderItem item);
     Task<IEnumerable<OrderItem>> GetByOrderIdAsync(int orderId);
+    Task<bool> AnyForProductAsync(int productId, CancellationToken cancellationToken = default);
 }

@@ -41,6 +41,12 @@ public class StockRepository : IStockRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<bool> AnyOnHandForProductAsync(int productId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Stocks
+            .AnyAsync(s => s.ProductId == productId && s.Quantity > 0, cancellationToken);
+    }
+
     // public async Task<Product?> GetByProductAsync(Guid productUid, CancellationToken cancellationToken = default)
     // {
     //     return await _context.Products

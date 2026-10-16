@@ -7,6 +7,7 @@ public interface IStockRepository
     IQueryable<Stock> Query();
     Task<Stock?> GetAsync(Guid warehouseUid, Guid productUid, CancellationToken cancellationToken = default);
     Task <IEnumerable<Stock>> GetByWarehouseAsync(Guid warehouseUid, CancellationToken cancellationToken = default);
+    Task<bool> AnyOnHandForProductAsync(int productId, CancellationToken cancellationToken = default);
     // Task<Product?> GetByProductAsync(Guid productUid, CancellationToken cancellationToken = default);
     Task AddAsync(Stock stock);
     Task UpdateAsync(Stock stock);
